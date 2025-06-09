@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form"
 import http from "@/app/lib/ApiService"
 import JwtService from "@/app/lib/JwtService"
 import { useRouter } from "next/navigation"
+import { useToast } from "../ui/toast"
 
 
 
@@ -26,6 +27,7 @@ export default function LoginForm() {
   const navigation = useRouter()
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
+  const {error} = useToast()
 
   const {
     register,
@@ -46,15 +48,18 @@ export default function LoginForm() {
       if (res.status === 200) {
         let data = res.data
         JwtService.saveToken(data.token)
-        JwtService.saveAuth(data.role)
+        JwtService.saveAuth(data.role)        
         if (data.role === "User") {
           navigation.push('/')
         } else if (data.role === "Admin") {
           navigation.push('/admin/articles')
         }
       }
-    } catch (error) {
+    } catch (err: any) {
       setLoading(false)
+      console.log(err);
+      
+      error(err.response.data.error || "Sistem Error. Please try again.")
       console.log(error);
     }
     // handle login logic here
@@ -148,7 +153,7 @@ export default function LoginForm() {
                   Loading...
                 </>
               ) : (
-                "Search"
+                "Login"
               )}
             </button>
 

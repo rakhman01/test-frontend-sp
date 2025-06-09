@@ -14,6 +14,7 @@ import TextAlign from "@tiptap/extension-text-align"
 import { UIButton } from "./ui-button"
 import http from "@/app/lib/ApiService"
 import { useRouter } from "next/navigation"
+import { useToast } from "./toast"
 
 // Define interfaces for better type safety
 interface Category {
@@ -56,6 +57,7 @@ export function EditArticleForm({ articleId }: EditArticleFormProps) {
   const [listCategory, setListCategory] = useState<Category[]>([])
   const [fetchingCategories, setFetchingCategories] = useState(false)
   const [article, setArticle] = useState<Article | null>(null)
+  const {error} = useToast()
 
   const {
     register,
@@ -245,9 +247,8 @@ export function EditArticleForm({ articleId }: EditArticleFormProps) {
       } else {
         throw new Error("Failed to update article")
       }
-    } catch (error) {
-      console.error("Update error:", error)
-      alert("Failed to update article. Please try again.")
+    } catch (err: any) {
+      error(err.response.data.error || "Sistem Error. Please try again.")
     } finally {
       setLoading(false)
     }

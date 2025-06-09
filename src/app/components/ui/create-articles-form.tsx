@@ -14,6 +14,7 @@ import TextAlign from "@tiptap/extension-text-align"
 import { UIButton } from "./ui-button"
 import http from "@/app/lib/ApiService"
 import { useRouter } from "next/navigation"
+import { useToast } from "./toast"
 
 // Define interfaces for better type safety
 interface Category {
@@ -40,6 +41,7 @@ export function CreateArticleForm() {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [listCategory, setListCategory] = useState<Category[]>([])
   const [fetchingCategories, setFetchingCategories] = useState(false)
+  const {error} = useToast()
 
   const fetchData = async () => {
     setFetchingCategories(true)
@@ -188,9 +190,8 @@ export function CreateArticleForm() {
       } else {
         throw new Error("Failed to create article")
       }
-    } catch (error) {
-      console.error("Submit error:", error)
-      alert("Failed to create article. Please try again.")
+    } catch (err: any) {
+      error(err.response.data.error || "Sistem Error. Please try again.")
     } finally {
       setLoading(false)
     }
@@ -213,7 +214,7 @@ export function CreateArticleForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 text-black">
       <div className="flex items-center mb-6">
-        <Link href="/admin" className="flex items-center text-gray-600 hover:text-gray-900">
+        <Link href="/admin/articles" className="flex items-center text-gray-600 hover:text-gray-900">
           <ArrowLeft className="h-4 w-4 mr-2" />
           <span>Create Articles</span>
         </Link>

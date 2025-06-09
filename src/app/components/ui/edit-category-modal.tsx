@@ -5,6 +5,7 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "./modal"
 import { UIButton } from "./ui-button"
+import { FormInput } from "./form-input"
 
 interface EditCategoryModalProps {
   isOpen: boolean
@@ -50,7 +51,7 @@ export function EditCategoryModal({ isOpen, onClose, onConfirm, category }: Edit
               <label htmlFor="editCategoryName" className="block text-sm font-medium text-gray-700 mb-1">
                 Category Name
               </label>
-              <input
+              <FormInput
                 id="editCategoryName"
                 placeholder="Enter category name"
                 value={categoryName}
