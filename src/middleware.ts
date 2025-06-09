@@ -28,7 +28,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/unauthorized', request.url))
   }
 
-  if (!pathname.startsWith('/admin') && role !== 'User') {
+  if (!pathname.startsWith('/admin') && role !== 'User' && role !== undefined) {
     return NextResponse.redirect(new URL('/admin/articles', request.url))
   }
 
